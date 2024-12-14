@@ -22,31 +22,50 @@ class ATM:
             ).pack(pady=5)
     def atmTask(self, task, amount, logBox, userID):
         db = DB()
+        log_message = ""
         try:
             amount = float(amount)
         except ValueError:
-            logBox.insert(tk.END, "Invalid amount entered.\n")
-            return
+            log_message = "Invalid amount entered.\n"
+            if logBox:
+                logBox.insert(tk.END, log_message)
+            return log_message
+
         try:
             userID = int(userID)
         except ValueError:
-            logBox.insert(tk.END, "Invalid user ID entered.\n")
-            return
+            log_message = "Invalid user ID entered.\n"
+            if logBox:
+                logBox.insert(tk.END, log_message)
+            return log_message
+
         if not db.userExistsById(userID):
-            logBox.insert(tk.END, "User ID does not exist.\n")
-            return
+            log_message = "User ID does not exist.\n"
+            if logBox:
+                logBox.insert(tk.END, log_message)
+            return log_message
+
         with self.balanceLOCK:
             currentBalance = db.getUserBalance(userID)
             if task == "Deposit":
                 newBalance = currentBalance + amount
                 db.updateBalanceInDatabase(userID, newBalance)
-                logBox.insert(tk.END, f"User ID {userID} deposited {amount}. New balance: {newBalance}\n")
+                log_message = f"User ID {userID} deposited {amount}. New balance: {newBalance}\n"
+                if logBox:
+                    logBox.insert(tk.END, f"User ID {userID} deposited {amount}. New balance: {newBalance}\n")
             elif task == "Withdraw":
                 if currentBalance >= amount:
                     newBalance = currentBalance - amount
                     db.updateBalanceInDatabase(userID, newBalance)
-                    logBox.insert(tk.END, f"User ID {userID} withdrew {amount}. New balance: {newBalance}\n")
+                    log_message = f"User ID {userID} withdrew {amount}. New balance: {newBalance}\n"
+                    if logBox:
+                        logBox.insert(tk.END, f"User ID {userID} withdrew {amount}. New balance: {newBalance}\n")
                 else:
-                    logBox.insert(tk.END, f"User ID {userID} has insufficient funds for withdrawal.\n")
+                    log_message = f"User ID {userID} has insufficient funds for withdrawal.\n"
+                    if logBox:
+                        logBox.insert(tk.END, f"User ID {userID} has insufficient funds for withdrawal.\n")
             elif task == "Check Balance":
-                logBox.insert(tk.END, f"User ID {userID}'s balance: {currentBalance}\n")
+                log_message = f"User ID {userID}'s balance: {currentBalance}\n"
+                if logBox:
+                    logBox.insert(tk.END, f"User ID {userID}'s balance: {currentBalance}\n")
+        return log_message

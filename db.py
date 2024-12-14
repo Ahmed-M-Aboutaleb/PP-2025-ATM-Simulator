@@ -1,5 +1,5 @@
 import sqlite3
-
+import time
 class DB:
     def __init__(self):
         conn = sqlite3.connect("atm_simulator.db")
@@ -27,6 +27,7 @@ class DB:
             conn.close()
 
     def updateBalanceInDatabase(self, userID, newBalance):
+        time.sleep(0.1)
         conn = sqlite3.connect("atm_simulator.db")
         cursor = conn.cursor()
         cursor.execute("UPDATE users SET balance = ? WHERE id = ?", (newBalance, userID))
@@ -34,6 +35,7 @@ class DB:
         conn.close()
 
     def getUserBalance(self, userID):
+        time.sleep(0.1)
         conn = sqlite3.connect("atm_simulator.db")
         cursor = conn.cursor()
         cursor.execute("SELECT balance FROM users WHERE id = ?", (userID,))
@@ -42,6 +44,7 @@ class DB:
         return result[0] if result else None
 
     def userExistsById(self, userID):
+        time.sleep(0.1)
         conn = sqlite3.connect("atm_simulator.db")
         cursor = conn.cursor()
         cursor.execute("SELECT 1 FROM users WHERE id = ?", (userID,))
