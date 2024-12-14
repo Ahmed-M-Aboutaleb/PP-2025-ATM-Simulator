@@ -39,13 +39,12 @@ class ATM:
                 logBox.insert(tk.END, log_message)
             return log_message
 
-        if not db.userExistsById(userID):
-            log_message = "User ID does not exist.\n"
-            if logBox:
-                logBox.insert(tk.END, log_message)
-            return log_message
-
         with self.balanceLOCK:
+            if not db.userExistsById(userID):
+                log_message = "User ID does not exist.\n"
+                if logBox:
+                    logBox.insert(tk.END, log_message)
+                return log_message
             currentBalance = db.getUserBalance(userID)
             if task == "Deposit":
                 newBalance = currentBalance + amount
