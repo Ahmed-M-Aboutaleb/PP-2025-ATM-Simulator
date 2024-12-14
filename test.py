@@ -5,7 +5,6 @@ from db import DB
 
 def simulate_sequential(transactions, num_atms):
     atms = [ATM(i, None) for i in range(1, num_atms + 1)]
-    db = DB()
 
     start_time = time.time()
     logs = []
@@ -21,7 +20,6 @@ def simulate_sequential(transactions, num_atms):
 
 def simulate_multithreaded(transactions, num_atms):
     atms = [ATM(i, None) for i in range(1, num_atms + 1)]
-    db = DB()
 
     start_time = time.time()
     threads = []
@@ -47,9 +45,9 @@ def simulate_multithreaded(transactions, num_atms):
 
 if __name__ == "__main__":
     db = DB()
-    db.addUserToDatabase("Alice", 1000)
-    db.addUserToDatabase("Bob", 500)
-    db.addUserToDatabase("Charlie", 300)
+    db.addUserToDatabase("Ahmed", 1000)
+    db.addUserToDatabase("Abdullah", 500)
+    db.addUserToDatabase("Bioumy", 300)
 
     # Example transactions: (user_id, task, amount)
     transactions = [
@@ -92,3 +90,5 @@ if __name__ == "__main__":
     print("\n".join(multithreaded_logs))
     print(f"Sequential Execution Time: {sequential_time:.4f} seconds\n")
     print(f"Multithreaded Execution Time: {multithreaded_time:.4f} seconds")
+    speedup = sequential_time / multithreaded_time if multithreaded_time > 0 else 1
+    print(f"\nSpeedup: {speedup:.2f}x")
